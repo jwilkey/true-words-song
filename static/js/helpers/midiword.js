@@ -43,11 +43,19 @@ MidiWord.prototype.getChord = function (chord) {
 MidiWord.prototype.msPerBeat = function () {
   return 60 / this.tempo * 1000
 }
-MidiWord.prototype.playTonic = function (instrument) {
-  window.MIDI.chordOn(instrument || 0, this.getChord('tonic'), 115, 0)
+MidiWord.prototype.playTonic = function (instrument, shouldGlissando) {
+  if (shouldGlissando) {
+    this.glissandoNotes(this.getChord('tonic'))
+  } else {
+    window.MIDI.chordOn(instrument || 0, this.getChord('tonic'), 115, 0)
+  }
 }
-MidiWord.prototype.playFifth = function (instrument) {
-  window.MIDI.chordOn(instrument || 0, this.getChord('fifth'), 115, 0)
+MidiWord.prototype.playFifth = function (instrument, shouldGlissando) {
+  if (shouldGlissando) {
+    this.glissandoNotes(this.getChord('fifth'))
+  } else {
+    window.MIDI.chordOn(instrument || 0, this.getChord('fifth'), 115, 0)
+  }
 }
 MidiWord.prototype.getNote = function (char) {
   var charValue = chars[char.toLowerCase()]
@@ -70,8 +78,11 @@ MidiWord.prototype.randomVelocity = function () {
 }
 
 MidiWord.prototype.glissando = function (word) {
-  var delay = 0
   var notes = this.getNotes(word)
+  this.glissandoNotes(notes)
+}
+MidiWord.prototype.glissandoNotes = function (notes) {
+  var delay = 0
   notes.forEach(note => {
     window.MIDI.noteOn(0, note, 120, delay)
     delay += this.msPerBeat() / 1000 / 4
