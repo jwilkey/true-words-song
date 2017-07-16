@@ -2,7 +2,7 @@
 var pentatonicMajor = [0, 2, 4, 7, 9];
 var pentatonicMinor = [0, 2, 3, 7, 9];
 var major = [0, 2, 4, 5, 7, 9, 11];
-var minor = [0, 2, 3, 5, 7, 9, 11];
+var minor = [0, 2, 3, 5, 7, 8, 10];
 var wholeToneScale = [0, 2, 4, 6, 8, 10];
 
 var chars = {
@@ -17,13 +17,7 @@ function MidiWord(tonicBassNote, tempo, scale) {
   this.tonicBassNote = tonicBassNote
   this.tempo = tempo
   this.scale = scale
-  this.scales = {
-    "major": major,
-    "minor": minor,
-    "major_pentatonic": pentatonicMajor,
-    "minor_pentatonic": pentatonicMinor,
-    "whole": wholeToneScale
-  }
+  this.scales = scales
 }
 
 const chords = {
@@ -34,8 +28,16 @@ const chords = {
   whole: {tonic: [0, 12, 16, 20, 36], fifth: [8, 16, 20, 24, 32]}
 }
 
+const scales = {
+  major_pentatonic: {name: 'Major Pentatonic', notes: pentatonicMajor},
+  minor_pentatonic: {name: 'Minor Pentatonic', notes: pentatonicMinor},
+  major: {name: 'Major', notes: major},
+  minor: {name: 'Minor', notes: minor},
+  whole: {name: 'Whote Tone', notes: wholeToneScale}
+}
+
 MidiWord.prototype.scaleNotes = function () {
-  return this.scales[this.scale]
+  return this.scales[this.scale].notes
 }
 MidiWord.prototype.getChord = function (chord) {
   return chords[this.scale][chord].map(i => this.tonicBassNote + i)
