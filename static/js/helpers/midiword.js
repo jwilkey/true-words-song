@@ -89,4 +89,4 @@ MidiWord.prototype.glissandoNotes = function (notes) {
   })
 }
 
-export default new MidiWord(40, 120, 'major_pentatonic')
+export default new MidiWord(40, 160, 'major_pentatonic')
